@@ -1,4 +1,5 @@
 import VoxeetSDK from "@voxeet/voxeet-web-sdk";
+import { invoke } from "@forge/bridge";
 import { baseConferenceService, ConferenceService } from "./conference-service";
 import forgeTokenService from "./forge-token-service";
 
@@ -7,5 +8,7 @@ export default async function forgeConferenceService(): Promise<ConferenceServic
   const accessToken = await tokenService.getToken();
   VoxeetSDK.initializeToken(accessToken, () => tokenService.getToken());
 
-  return baseConferenceService();
+  const accountId: string = await invoke("getAccountId");
+
+  return baseConferenceService(accountId);
 }

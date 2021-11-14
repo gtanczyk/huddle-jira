@@ -7,5 +7,5 @@ export default function mockConferenceService(): ConferenceService {
     process.env.REACT_APP_DOLBY_CUSTOMER_SECRET || ""
   );
 
-  return baseConferenceService();
+  return baseConferenceService("externalid");
 }

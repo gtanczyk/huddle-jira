@@ -7,11 +7,11 @@ export type ConferenceService = {
   roomExists(roomId: string): Promise<Boolean>;
 };
 
-export function baseConferenceService(): ConferenceService {
+export function baseConferenceService(externalId: string): ConferenceService {
   let sessionOpened = false;
   const openSessionIfNeeded = async () => {
     if (!sessionOpened) {
-      await VoxeetSDK.session.open({ name: "dupa" });
+      await VoxeetSDK.session.open({ externalId });
       sessionOpened = true;
     }
   };
