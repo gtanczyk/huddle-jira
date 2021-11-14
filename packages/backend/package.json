@@ -1,0 +1,15 @@
+{
+  "name": "huddle-jira-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-plugin-react-hooks": "^2.1.2"
+  },
+  "dependencies": {
+    "@forge/resolver": "^1.3.5",
+    "axios": "^0.24.0"
+  }
+}

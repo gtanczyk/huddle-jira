@@ -1,0 +1,30 @@
+modules:
+  jira:issuePanel:
+    - key: huddle-jira-panel
+      resource: main
+      resolver:
+        function: resolver
+      viewportSize: medium
+      title: huddle-jira
+      icon: https://developer.atlassian.com/platform/forge/images/issue-panel-icon.svg
+  function:
+    - key: resolver
+      handler: index.handler
+resources:
+  - key: main
+    path: ../frontend/build
+permissions:
+  scopes:
+    - read:jira-work
+    - write:jira-work
+  external:
+    fetch:
+      backend:
+        - "*.voxeet.com"
+      client:
+        - "*.voxeet.com"
+        - "wss://*.voxeet.com"
+app:
+  id: ari:cloud:ecosystem::app/f55f2c16-ec13-4e69-84af-c187790201c1
+  runtime:
+    snapshots: false

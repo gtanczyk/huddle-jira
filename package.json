@@ -1,0 +1,25 @@
+{
+  "name": "huddle-jira",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {},
+  "devDependencies": {
+    "husky": "^7.0.0",
+    "prettier": "^2.4.1",
+    "pretty-quick": "^3.1.1"
+  },
+  "scripts": {
+    "prettier": "prettier --write .",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gtanczyk/huddle-jira.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gtanczyk/huddle-jira/issues"
+  },
+  "homepage": "https://github.com/gtanczyk/huddle-jira#readme"
+}
