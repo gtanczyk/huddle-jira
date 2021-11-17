@@ -35,9 +35,11 @@ export function useHuddleConnect() {
     ) {
       huddleRoomId = await state.conferenceService.createRoom(huddleRoomAlias);
       await state.issueDataService.setProperty("huddleRoomId", huddleRoomId);
+      state.conferenceService.setRoom(huddleRoomId);
     }
 
-    await state.conferenceService.joinRoom(huddleRoomId);
+    await state.conferenceService.joinRoom();
+    await state.huddleService.join();
 
     setState({ ...state, isConnected: true });
   };
@@ -53,6 +55,7 @@ export function useHuddleDisconnect() {
     }
 
     await state.conferenceService.leaveRoom();
+    await state.huddleService.leave();
     setState({ ...state, isConnected: false });
   };
 }

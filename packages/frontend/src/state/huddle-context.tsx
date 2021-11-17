@@ -4,6 +4,8 @@ import { useState } from "react";
 import { TokenService } from "../services/token-service";
 import { IssueDataService } from "../services/issue-data-service";
 import { ConferenceService } from "../services/conference-service";
+import { HuddleService } from "../services/huddle-service";
+import { UserService } from "../services/user-service";
 
 type HuddleState = {
   isConnected: boolean;
@@ -11,6 +13,8 @@ type HuddleState = {
   issueDataService: IssueDataService;
   tokenService: TokenService;
   conferenceService: ConferenceService;
+  userService: UserService;
+  huddleService: HuddleService;
 };
 
 const useValue = () => useState<HuddleState | null>(null);

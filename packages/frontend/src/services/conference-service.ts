@@ -2,9 +2,18 @@ import VoxeetSDK from "@voxeet/voxeet-web-sdk";
 
 export type ConferenceService = {
   createRoom: (roomAlias: string) => Promise<string>;
-  joinRoom: (roomId: string) => Promise<void>;
+  setRoom: (roomId: string) => void;
+  joinRoom: () => Promise<void>;
   leaveRoom: () => Promise<void>;
   roomExists(roomId: string): Promise<Boolean>;
+
+  onParticipants: (callback: (participants: Participant[]) => void) => void;
+  offParticipants: (callback: (participants: Participant[]) => void) => void;
+  getParticipants(): Promise<Participant[]>;
+};
+
+export type Participant = {
+  accountId: string;
 };
 
 export function baseConferenceService(externalId: string): ConferenceService {
@@ -16,9 +25,39 @@ export function baseConferenceService(externalId: string): ConferenceService {
     }
   };
 
-  let currentRoomId: string | null = null;
+  let roomId: string | null = null;
+
+  const participantsCallbacks: ((participants: Participant[]) => void)[] = [];
+  const triggerParticipantsCallbacks = async () => {
+    if (!roomId) {
+      return;
+    }
+    let participants = await getConferenceParticipants(roomId);
+    participantsCallbacks.forEach((callback) => callback(participants));
+  };
+  VoxeetSDK.conference.on("participantAdded", triggerParticipantsCallbacks);
+  VoxeetSDK.conference.on("participantUpdated", triggerParticipantsCallbacks);
 
   return {
+    setRoom: (_roomId: string) => {
+      roomId = _roomId;
+    },
+    async onParticipants(callback: (participants: Participant[]) => void) {
+      if (!roomId) {
+        return;
+      }
+
+      participantsCallbacks.push(callback);
+      callback(await getConferenceParticipants(roomId));
+    },
+    offParticipants(callback: (participants: Participant[]) => void): void {
+      participantsCallbacks.splice(participantsCallbacks.indexOf(callback), 1);
+    },
+    getParticipants(): Promise<Participant[]> {
+      return (
+        (roomId && getConferenceParticipants(roomId)) || Promise.resolve([])
+      );
+    },
     async roomExists(roomId) {
       return (await VoxeetSDK.conference.fetch(roomId)).status === "created";
     },
@@ -30,20 +69,35 @@ export function baseConferenceService(externalId: string): ConferenceService {
       });
       return conference.id;
     },
-    async joinRoom(roomId: string) {
+    async joinRoom() {
       await openSessionIfNeeded();
+      if (!roomId) {
+        return;
+      }
 
       let conference = await VoxeetSDK.conference.fetch(roomId);
       await VoxeetSDK.conference.join(conference, {});
-      currentRoomId = roomId;
     },
     async leaveRoom() {
-      if (currentRoomId) {
+      if (roomId) {
         await VoxeetSDK.conference.leave({});
         await VoxeetSDK.session.close();
-        currentRoomId = null;
+        roomId = null;
         sessionOpened = false;
       }
     },
   };
+}
+
+async function getConferenceParticipants(currentRoomId: string) {
+  const conference = await VoxeetSDK.conference.fetch(currentRoomId);
+  const participants: Participant[] = [];
+  for (const participant of Array.from(conference.participants.values())) {
+    if (participant.info.externalId && participant.status === "Connected") {
+      participants.push({
+        accountId: participant.info.externalId,
+      });
+    }
+  }
+  return participants;
 }

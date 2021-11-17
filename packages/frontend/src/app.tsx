@@ -1,5 +1,7 @@
 import React, { Suspense } from "react";
 
+import ProgressBar from "@atlaskit/progress-bar";
+
 const PanelPage =
   process.env["REACT_APP_MOCK"] === "true"
     ? React.lazy(() => import("./pages/mocked-panel-page"))
@@ -7,7 +9,7 @@ const PanelPage =
 
 function App() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<ProgressBar isIndeterminate />}>
       <PanelPage />
     </Suspense>
   );
