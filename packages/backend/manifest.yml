@@ -4,9 +4,8 @@ modules:
       resource: main
       resolver:
         function: resolver
-      viewportSize: medium
-      title: huddle-jira
-      icon: https://developer.atlassian.com/platform/forge/images/issue-panel-icon.svg
+      title: Huddle in Jira
+      icon: https://upload.wikimedia.org/wikipedia/commons/c/c2/Font_Awesome_5_solid_headset.svg
   function:
     - key: resolver
       handler: index.handler
