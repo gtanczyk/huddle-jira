@@ -64,14 +64,19 @@ function ScreenShareStream({ participant }: { participant: Participant }) {
             event.preventDefault();
             ref.current?.querySelector("video")?.requestFullscreen();
           }}
-        />{" "}
-        <Button
-          iconBefore={<PIPIcon />}
-          onClickCapture={(event) => {
-            event.preventDefault();
-            ref.current?.querySelector("video")?.requestPictureInPicture();
-          }}
         />
+        {HTMLVideoElement.prototype.requestPictureInPicture && (
+          <>
+            {" "}
+            <Button
+              iconBefore={<PIPIcon />}
+              onClickCapture={(event) => {
+                event.preventDefault();
+                ref.current?.querySelector("video")?.requestPictureInPicture();
+              }}
+            />
+          </>
+        )}
       </ScreenShareControls>
     </ScreenShareWatchContainer>
   );

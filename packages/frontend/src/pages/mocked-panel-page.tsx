@@ -43,6 +43,7 @@ function MockedPanelPageContent() {
     await huddleService.init();
 
     setState({
+      accountId,
       isConnected: false,
 
       issueDataService,

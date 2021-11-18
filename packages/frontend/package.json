@@ -33,6 +33,7 @@
     "@atlaskit/icon": "^21.9.1",
     "@atlaskit/inline-message": "^11.1.5",
     "@atlaskit/progress-bar": "^0.3.9",
+    "@atlaskit/section-message": "^6.1.5",
     "@atlaskit/tooltip": "^17.5.2",
     "@emotion/react": "^11.6.0",
     "@emotion/styled": "^11.6.0",

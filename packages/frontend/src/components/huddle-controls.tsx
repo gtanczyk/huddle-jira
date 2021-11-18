@@ -4,7 +4,6 @@ import Button from "@atlaskit/button";
 import VidAudioOnIcon from "@atlaskit/icon/glyph/vid-audio-on";
 import VidAudioMutedIcon from "@atlaskit/icon/glyph/vid-audio-muted";
 import VidShareScreenIcon from "@atlaskit/icon/glyph/vid-share-screen";
-import VidFullScreenOnIcon from "@atlaskit/icon/glyph/vid-full-screen-on";
 
 import { useMute, useScreenSharing } from "../hooks/conference";
 import { useParticipants } from "../hooks/participants";
@@ -56,8 +55,14 @@ function ScreenSharingButton() {
   return (
     <>
       <Button
-        isDisabled={!!sharingParticipant && !isScreenSharing}
-        isSelected={isScreenSharing}
+        isDisabled={
+          !!sharingParticipant &&
+          (!isScreenSharing ||
+            sharingParticipant?.accountId !== state.accountId)
+        }
+        isSelected={
+          isScreenSharing && sharingParticipant?.accountId === state.accountId
+        }
         onClick={async () => {
           try {
             await setScreenSharing(!isScreenSharing);

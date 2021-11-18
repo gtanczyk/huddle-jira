@@ -29,9 +29,13 @@ function PanelPageContent() {
   const initState = async () => {
     const userService = forgeUserService();
     const accountId = await userService.getAccountId();
+    const tokenService = forgeTokenService();
 
     const issueDataService = await forgeIssueDataService();
-    const conferenceService = await forgeConferenceService(accountId);
+    const conferenceService = await forgeConferenceService(
+      accountId,
+      tokenService
+    );
     const huddleService = getHuddleService(
       accountId,
       issueDataService,
@@ -42,9 +46,10 @@ function PanelPageContent() {
 
     setState({
       isConnected: false,
+      accountId,
 
       issueDataService,
-      tokenService: forgeTokenService(),
+      tokenService,
       conferenceService: conferenceService,
       huddleService,
       userService,

@@ -8,6 +8,7 @@ import { HuddleService } from "../services/huddle-service";
 import { UserService } from "../services/user-service";
 
 type HuddleState = {
+  accountId: string;
   isConnected: boolean;
 
   issueDataService: IssueDataService;

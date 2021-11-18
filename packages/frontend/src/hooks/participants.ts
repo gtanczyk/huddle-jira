@@ -24,11 +24,7 @@ export function useSpeakingStatus(accountId: string): SpeakingStatus {
 
   useEffect(() => {
     if (state?.isConnected) {
-      const offSpeaking = state.conferenceService.onSpeaking(
-        accountId,
-        setSpeaking
-      );
-      return offSpeaking;
+      return state.conferenceService.onSpeaking(accountId, setSpeaking);
     }
   }, [state?.isConnected]);
 

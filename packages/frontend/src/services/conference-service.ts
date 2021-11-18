@@ -3,6 +3,7 @@ import VoxeetSDK from "@voxeet/voxeet-web-sdk";
 export type ConferenceService = {
   createRoom: (roomAlias: string) => Promise<string>;
   setRoom: (roomId: string) => void;
+  getRoom: () => string | null;
   joinRoom: () => Promise<void>;
   leaveRoom: () => Promise<void>;
   roomExists(roomId: string): Promise<Boolean>;
@@ -59,6 +60,10 @@ export function baseConferenceService(externalId: string): ConferenceService {
   VoxeetSDK.conference.on("streamUpdated", triggerParticipantsCallbacks);
 
   return {
+    getRoom() {
+      return roomId;
+    },
+
     setRoom: (_roomId: string) => {
       roomId = _roomId;
     },
@@ -163,7 +168,7 @@ async function getConferenceParticipants(currentRoomId: string) {
       participants.push({
         accountId: participant.info.externalId,
         isScreenSharing: participant.streams.some(
-          (stream) => stream.type === "ScreenShare"
+          (stream) => stream.type === "ScreenShare" && stream.active
         ),
       });
     }
