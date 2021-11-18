@@ -25,7 +25,7 @@ export default async function forgeConferenceService(
           encodeURIComponent(
             JSON.stringify({
               token: screenShareAccessToken,
-              externalId: accountId + "-share",
+              externalId: `share:${accountId}`,
               conferenceId: conferenceService.getRoom(),
             })
           )

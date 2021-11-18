@@ -39,7 +39,7 @@ function MuteButton() {
 }
 
 function ScreenSharingButton() {
-  const [isScreenSharing, setScreenSharing] = useScreenSharing();
+  let [isScreenSharing, setScreenSharing] = useScreenSharing();
   const participants = useParticipants();
   const state = useHuddleState();
   const [sharingError, setSharingError] = useState(false);
@@ -52,6 +52,9 @@ function ScreenSharingButton() {
     (participant) => participant.isScreenSharing
   );
 
+  isScreenSharing =
+    isScreenSharing && sharingParticipant?.accountId === state.accountId;
+
   return (
     <>
       <Button
@@ -60,9 +63,7 @@ function ScreenSharingButton() {
           (!isScreenSharing ||
             sharingParticipant?.accountId !== state.accountId)
         }
-        isSelected={
-          isScreenSharing && sharingParticipant?.accountId === state.accountId
-        }
+        isSelected={isScreenSharing}
         onClick={async () => {
           try {
             await setScreenSharing(!isScreenSharing);

@@ -14,12 +14,14 @@ export default function ParticipantList() {
 
   return (
     <ParticipantListContainer>
-      {participants?.map((participant) => (
-        <Participant
-          key={participant.accountId}
-          accountId={participant.accountId}
-        />
-      ))}
+      {participants
+        ?.filter((participant) => !participant.accountId.startsWith("share:"))
+        .map((participant) => (
+          <Participant
+            key={participant.accountId}
+            accountId={participant.accountId}
+          />
+        ))}
     </ParticipantListContainer>
   );
 }
