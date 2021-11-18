@@ -2,10 +2,12 @@ import React from "react";
 import Avatar from "@atlaskit/avatar";
 import styled from "@emotion/styled";
 import Tooltip from "@atlaskit/tooltip";
-import InlineMessage from "@atlaskit/inline-message";
 
-import { useParticipants } from "../hooks/participants";
+import { useParticipants, useSpeakingStatus } from "../hooks/participants";
 import { useUserDetails } from "../hooks/users";
+import { shake, shakeStrong } from "./shake-styles";
+import { SpeakingStatus } from "../services/conference-service";
+import { css } from "@emotion/react";
 
 export default function ParticipantList() {
   const participants = useParticipants();
@@ -18,16 +20,16 @@ export default function ParticipantList() {
           accountId={participant.accountId}
         />
       ))}
-      {participants?.length === 0 && <NoParticipants />}
     </ParticipantListContainer>
   );
 }
 
 function Participant({ accountId }: { accountId: string }) {
   const userDetails = useUserDetails(accountId);
+  const speaking = useSpeakingStatus(accountId);
 
   return (
-    <ParticipantContainer>
+    <ParticipantContainer speaking={speaking}>
       <Tooltip content={userDetails?.displayName || "Unknown user"}>
         <Avatar
           name={userDetails?.displayName}
@@ -38,21 +40,21 @@ function Participant({ accountId }: { accountId: string }) {
   );
 }
 
-function NoParticipants() {
-  return (
-    <InlineMessage secondaryText="Empty huddle, no one is speaking.">
-      This huddle is empty, you can join it and invite your team!
-    </InlineMessage>
-  );
-}
-
 const ParticipantListContainer = styled.div`
   display: flex;
   flex-direction: row;
   flex-grow: 1;
-  justify-content: center;
+  margin-left: 12px;
 `;
 
-const ParticipantContainer = styled.div`
+const ParticipantContainer = styled.div<{ speaking: SpeakingStatus }>`
   display: flex;
+
+  ${({ speaking }) =>
+    speaking !== "silent" &&
+    css`
+      animation-name: ${speaking === "speaking-a-lot" ? shakeStrong : shake};
+      animation-duration: 0.4s;
+      animation-iteration-count: infinite;
+    `}
 `;

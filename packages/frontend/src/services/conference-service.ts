@@ -10,11 +10,21 @@ export type ConferenceService = {
   onParticipants: (callback: (participants: Participant[]) => void) => void;
   offParticipants: (callback: (participants: Participant[]) => void) => void;
   getParticipants(): Promise<Participant[]>;
+
+  onSpeaking(
+    accountId: string,
+    setSpeaking: (status: SpeakingStatus) => void
+  ): () => void;
+
+  isMuted(): boolean;
+  setMuted(isMuted: boolean): void;
 };
 
 export type Participant = {
   accountId: string;
 };
+
+export type SpeakingStatus = "silent" | "speaking" | "speaking-a-lot";
 
 export function baseConferenceService(externalId: string): ConferenceService {
   let sessionOpened = false;
@@ -85,6 +95,31 @@ export function baseConferenceService(externalId: string): ConferenceService {
         roomId = null;
         sessionOpened = false;
       }
+    },
+    onSpeaking(accountId, setSpeaking) {
+      const interval = setInterval(() => {
+        const participant = Array.from(
+          VoxeetSDK.conference.participants.values()
+        ).find((participant) => participant.info.externalId === accountId);
+
+        if (!participant) {
+          return;
+        }
+
+        VoxeetSDK.conference.isSpeaking(participant, (isSpeaking: boolean) => {
+          setSpeaking(isSpeaking ? "speaking" : "silent");
+        });
+      }, 1000);
+
+      return () => clearInterval(interval);
+    },
+
+    isMuted() {
+      return VoxeetSDK.conference.isMuted();
+    },
+
+    setMuted(isMuted: boolean) {
+      VoxeetSDK.conference.mute(VoxeetSDK.session.participant, isMuted);
     },
   };
 }
