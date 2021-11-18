@@ -1,7 +1,7 @@
 import { UserService } from "./user-service";
 import forgeTokenService from "./forge-token-service";
 import VoxeetSDK from "@voxeet/voxeet-web-sdk";
-import { invoke } from "@forge/bridge";
+import { invoke, requestJira } from "@forge/bridge";
 
 export default function forgeUserService(): UserService {
   return {
@@ -11,6 +11,13 @@ export default function forgeUserService(): UserService {
       VoxeetSDK.initializeToken(accessToken, () => tokenService.getToken());
 
       return await invoke("getAccountId");
+    },
+
+    async getUserDetails(accountId: string) {
+      const response = await requestJira(
+        `/rest/api/3/user?accountId=${accountId}`
+      );
+      return response.status === 200 ? await response.json() : undefined;
     },
   };
 }
