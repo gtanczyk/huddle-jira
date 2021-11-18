@@ -15,6 +15,7 @@ jobs:
         working-directory: ./packages/frontend
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
+          working-directory: ./packages/frontend
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: >-
             ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FORGE_APPS_DEVELOPMENT_332514
