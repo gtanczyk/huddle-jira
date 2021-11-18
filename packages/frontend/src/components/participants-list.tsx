@@ -2,6 +2,7 @@ import React from "react";
 import Avatar from "@atlaskit/avatar";
 import styled from "@emotion/styled";
 import Tooltip from "@atlaskit/tooltip";
+import InlineMessage from "@atlaskit/inline-message";
 
 import { useParticipants } from "../hooks/participants";
 import { useUserDetails } from "../hooks/users";
@@ -17,6 +18,7 @@ export default function ParticipantList() {
           accountId={participant.accountId}
         />
       ))}
+      {participants?.length === 0 && <NoParticipants />}
     </ParticipantListContainer>
   );
 }
@@ -36,9 +38,19 @@ function Participant({ accountId }: { accountId: string }) {
   );
 }
 
+function NoParticipants() {
+  return (
+    <InlineMessage secondaryText="Empty huddle, no one is speaking.">
+      This huddle is empty, you can join it and invite your team!
+    </InlineMessage>
+  );
+}
+
 const ParticipantListContainer = styled.div`
   display: flex;
   flex-direction: row;
+  flex-grow: 1;
+  justify-content: center;
 `;
 
 const ParticipantContainer = styled.div`

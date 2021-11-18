@@ -15,7 +15,11 @@ import { mockUserService } from "../services/mock-user-service";
 export default function MockedPanelPage() {
   return (
     <HuddleContextProvider>
-      <MockedPanelPageContent />
+      <div
+        style={{ width: "870px", margin: "0 auto", border: "1px solid #eee" }}
+      >
+        <MockedPanelPageContent />
+      </div>
     </HuddleContextProvider>
   );
 }

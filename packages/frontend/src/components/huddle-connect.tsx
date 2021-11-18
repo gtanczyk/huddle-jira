@@ -15,7 +15,9 @@ export default function HuddleConnect() {
       <AsyncButton
         onClick={connect}
         iconBefore={<HipchatDialOutIcon label="Connect" />}
-      />
+      >
+        Join huddle
+      </AsyncButton>
       <ParticipantList />
     </HuddleConnectContainer>
   );
