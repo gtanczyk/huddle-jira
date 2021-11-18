@@ -18,10 +18,17 @@ export type ConferenceService = {
 
   isMuted(): boolean;
   setMuted(isMuted: boolean): void;
+
+  isScreenSharing(): boolean;
+  startScreenSharing(): Promise<void>;
+  stopScreenSharing(): Promise<void>;
+
+  getParticipantScreenShare(participant: Participant): MediaStream | undefined;
 };
 
 export type Participant = {
   accountId: string;
+  isScreenSharing?: boolean;
 };
 
 export type SpeakingStatus = "silent" | "speaking" | "speaking-a-lot";
@@ -47,6 +54,9 @@ export function baseConferenceService(externalId: string): ConferenceService {
   };
   VoxeetSDK.conference.on("participantAdded", triggerParticipantsCallbacks);
   VoxeetSDK.conference.on("participantUpdated", triggerParticipantsCallbacks);
+  VoxeetSDK.conference.on("streamAdded", triggerParticipantsCallbacks);
+  VoxeetSDK.conference.on("streamRemoved", triggerParticipantsCallbacks);
+  VoxeetSDK.conference.on("streamUpdated", triggerParticipantsCallbacks);
 
   return {
     setRoom: (_roomId: string) => {
@@ -121,6 +131,27 @@ export function baseConferenceService(externalId: string): ConferenceService {
     setMuted(isMuted: boolean) {
       VoxeetSDK.conference.mute(VoxeetSDK.session.participant, isMuted);
     },
+    isScreenSharing(): boolean {
+      return VoxeetSDK.session.participant.streams.some(
+        (stream) => stream.type === "ScreenShare"
+      );
+    },
+    async startScreenSharing() {
+      await VoxeetSDK.conference.startScreenShare();
+    },
+    async stopScreenSharing() {
+      await VoxeetSDK.conference.stopScreenShare();
+    },
+    getParticipantScreenShare(
+      participant: Participant
+    ): MediaStream | undefined {
+      let conferenceParticipant = Array.from(
+        VoxeetSDK.conference.participants.values()
+      ).find((p) => p.info.externalId === participant.accountId);
+      return conferenceParticipant?.streams.find(
+        (s) => s.type === "ScreenShare"
+      );
+    },
   };
 }
 
@@ -131,6 +162,9 @@ async function getConferenceParticipants(currentRoomId: string) {
     if (participant.info.externalId && participant.status === "Connected") {
       participants.push({
         accountId: participant.info.externalId,
+        isScreenSharing: participant.streams.some(
+          (stream) => stream.type === "ScreenShare"
+        ),
       });
     }
   }

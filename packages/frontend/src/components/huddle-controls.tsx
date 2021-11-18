@@ -1,35 +1,87 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Button from "@atlaskit/button";
 import VidAudioOnIcon from "@atlaskit/icon/glyph/vid-audio-on";
 import VidAudioMutedIcon from "@atlaskit/icon/glyph/vid-audio-muted";
-import { useMute } from "../hooks/conference";
+import VidShareScreenIcon from "@atlaskit/icon/glyph/vid-share-screen";
+import VidFullScreenOnIcon from "@atlaskit/icon/glyph/vid-full-screen-on";
+
+import { useMute, useScreenSharing } from "../hooks/conference";
+import { useParticipants } from "../hooks/participants";
+import { useHuddleState, useHuddleStateWrite } from "../state/huddle-context";
+import InlineMessage from "@atlaskit/inline-message";
+import styled from "@emotion/styled";
 
 export default function HuddleControls() {
+  return (
+    <HuddleControlsContainer>
+      <MuteButton /> <ScreenSharingButton />
+    </HuddleControlsContainer>
+  );
+}
+
+function MuteButton() {
   const [isMuted, setMute] = useMute();
+
+  return (
+    <Button
+      onClick={() => setMute(!isMuted)}
+      iconBefore={
+        isMuted ? (
+          <VidAudioMutedIcon label="You are not sharing your microphone" />
+        ) : (
+          <VidAudioOnIcon label="You are sharing your microphone" />
+        )
+      }
+    >
+      {isMuted ? "Unmute" : "Mute"}
+    </Button>
+  );
+}
+
+function ScreenSharingButton() {
+  const [isScreenSharing, setScreenSharing] = useScreenSharing();
+  const participants = useParticipants();
+  const state = useHuddleState();
+  const [sharingError, setSharingError] = useState(false);
+
+  if (!state) {
+    return null;
+  }
+
+  const sharingParticipant = participants?.find(
+    (participant) => participant.isScreenSharing
+  );
 
   return (
     <>
       <Button
-        onClick={() => setMute(!isMuted)}
+        isDisabled={!!sharingParticipant && !isScreenSharing}
+        isSelected={isScreenSharing}
+        onClick={async () => {
+          try {
+            await setScreenSharing(!isScreenSharing);
+            setSharingError(false);
+          } catch (e) {
+            setSharingError(true);
+          }
+        }}
         iconBefore={
-          isMuted ? (
-            <VidAudioMutedIcon label="You are not sharing your microphone" />
-          ) : (
-            <VidAudioOnIcon label="You are sharing your microphone" />
-          )
+          <VidShareScreenIcon label="Click to start sharing your screen" />
         }
       >
-        {isMuted ? "Unmute" : "Mute"}
+        Screen sharing
       </Button>
+      {sharingError && (
+        <InlineMessage title="Error sharing screen" type="error">
+          An error occurred. Please try again later.
+        </InlineMessage>
+      )}
     </>
   );
 }
 
-// iconEnabled = {}
-// iconDisabled = {
-// <VidAudioMutedIcon label="You are not sharing your microphone"/>
-// }
-
-// iconEnabled={<VidShareScreenIcon label="You are sharing your screen" />}
-// iconDisabled={<VidShareScreenIcon label="You are not sharing your screen" />}
+const HuddleControlsContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;

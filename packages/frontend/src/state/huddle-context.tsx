@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import { TokenService } from "../services/token-service";
 import { IssueDataService } from "../services/issue-data-service";
-import { ConferenceService } from "../services/conference-service";
+import { ConferenceService, Participant } from "../services/conference-service";
 import { HuddleService } from "../services/huddle-service";
 import { UserService } from "../services/user-service";
 

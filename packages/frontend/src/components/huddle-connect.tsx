@@ -27,6 +27,7 @@ const HuddleConnectContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  min-height: 40px;
 `;
 
 const HuddleIcon = () => (
