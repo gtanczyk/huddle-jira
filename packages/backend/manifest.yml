@@ -5,7 +5,7 @@ modules:
       resolver:
         function: resolver
       title: Huddle in Jira
-      icon: https://upload.wikimedia.org/wikipedia/commons/c/c2/Font_Awesome_5_solid_headset.svg
+      icon: https://storage.googleapis.com/forge-apps-dev-icons/huddle-icon.svg?1
   function:
     - key: resolver
       handler: index.handler
