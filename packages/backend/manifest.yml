@@ -29,3 +29,5 @@ permissions:
         - "wss://*.voxeet.com"
 app:
   id: ari:cloud:ecosystem::app/f55f2c16-ec13-4e69-84af-c187790201c1
+  runtime:
+    snapshots: true
