@@ -25,6 +25,7 @@ export type ConferenceService = {
   stopScreenSharing(): Promise<void>;
 
   getParticipantScreenShare(participant: Participant): MediaStream | undefined;
+  showFullscreenShare(): void;
 };
 
 export type Participant = {
@@ -157,6 +158,7 @@ export function baseConferenceService(externalId: string): ConferenceService {
         (s) => s.type === "ScreenShare"
       );
     },
+    showFullscreenShare() {},
   };
 }
 

@@ -14,7 +14,8 @@ import styled from "@emotion/styled";
 export default function HuddleControls() {
   return (
     <HuddleControlsContainer>
-      <MuteButton /> <ScreenSharingButton />
+      <MuteButton />
+      <ScreenSharingButton />
     </HuddleControlsContainer>
   );
 }

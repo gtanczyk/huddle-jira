@@ -6,6 +6,7 @@ import { useParticipantScreenShareStream } from "../hooks/conference";
 import styled from "@emotion/styled";
 import Button from "@atlaskit/button";
 import { useParticipants } from "../hooks/participants";
+import { css } from "@emotion/react";
 
 export default function ScreenShareWatch() {
   const participants = useParticipants();
@@ -57,14 +58,24 @@ function ScreenShareStream({ participant }: { participant: Participant }) {
     >
       <span className="click-label">Click to open in full screen</span>
       <ScreenShareControls>
-        <Button
-          color="white"
-          iconBefore={<VidFullScreenOnIcon label="Show full screen" />}
-          onClickCapture={(event) => {
-            event.preventDefault();
-            ref.current?.querySelector("video")?.requestFullscreen();
-          }}
-        />
+        {state &&
+          participant.accountId !== state.accountId &&
+          participant.accountId !== `share:${state.accountId}` && (
+            <Button
+              color="white"
+              iconBefore={<VidFullScreenOnIcon label="Show full screen" />}
+              onClickCapture={async (event) => {
+                event.preventDefault();
+                try {
+                  await ref.current
+                    ?.querySelector("video")
+                    ?.requestFullscreen();
+                } catch (e) {
+                  state?.conferenceService.showFullscreenShare();
+                }
+              }}
+            />
+          )}
         {HTMLVideoElement.prototype.requestPictureInPicture && (
           <>
             {" "}
@@ -82,10 +93,7 @@ function ScreenShareStream({ participant }: { participant: Participant }) {
   );
 }
 
-const ScreenShareWatchContainer = styled.div`
-  max-width: 256px;
-  max-height: 256px;
-  position: relative;
+export const videoControlStyles = css`
   cursor: pointer;
 
   &:not(:hover) .click-label {
@@ -115,6 +123,14 @@ const ScreenShareWatchContainer = styled.div`
   &:hover video {
     filter: brightness(50%);
   }
+`;
+
+const ScreenShareWatchContainer = styled.div`
+  max-width: 256px;
+  max-height: 256px;
+  position: relative;
+
+  ${videoControlStyles}
 `;
 
 const ScreenShareControls = styled.div`

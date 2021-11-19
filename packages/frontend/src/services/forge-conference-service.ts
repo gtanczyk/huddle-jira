@@ -32,5 +32,26 @@ export default async function forgeConferenceService(
       );
     }
   };
+  conferenceService.showFullscreenShare = async () => {
+    const sharingParticipant = (await conferenceService.getParticipants()).find(
+      (participant) => participant.isScreenSharing
+    );
+
+    if (!sharingParticipant) {
+      throw new Error("Sharing participant is empty");
+    }
+
+    await router.open(
+      "https://forge-apps-development-332514.web.app/#screenWatching" +
+        encodeURIComponent(
+          JSON.stringify({
+            token: screenShareAccessToken,
+            externalId: `share:${accountId}`,
+            conferenceId: conferenceService.getRoom(),
+            sharingParticipantId: sharingParticipant.accountId,
+          })
+        )
+    );
+  };
   return conferenceService;
 }

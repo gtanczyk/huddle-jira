@@ -1,7 +1,9 @@
 import React, { Suspense } from "react";
 
 import ProgressBar from "@atlaskit/progress-bar";
+
 import ScreenSharingPage from "./pages/screen-sharing-page";
+import ScreenWatchingPage from "./pages/screen-watching-page";
 
 const PanelPage =
   process.env["REACT_APP_MOCK"] === "true"
@@ -12,6 +14,8 @@ function App() {
   const Page = () =>
     document.location.hash.startsWith("#screenSharing") ? (
       <ScreenSharingPage />
+    ) : document.location.hash.startsWith("#screenWatching") ? (
+      <ScreenWatchingPage />
     ) : (
       <PanelPage />
     );
