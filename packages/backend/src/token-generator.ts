@@ -15,7 +15,12 @@ export async function generateToken() {
 
   const data = { grant_type: "client_credentials", expires_in: 3600 };
 
-  const response = await axios.post(url, data, config);
-  const { access_token } = response.data;
-  return access_token;
+  try {
+    const response = await axios.post(url, data, config);
+    const { access_token } = response.data;
+    return access_token;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
 }

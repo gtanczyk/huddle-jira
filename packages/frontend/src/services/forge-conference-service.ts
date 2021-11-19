@@ -8,13 +8,12 @@ export default async function forgeConferenceService(
   accountId: string,
   tokenService: TokenService
 ): Promise<ConferenceService> {
-  const [accessToken, screenShareAccessToken] = await Promise.all([
-    tokenService.getToken(),
-    tokenService.getToken(),
-  ]);
-  VoxeetSDK.initializeToken(accessToken, () => tokenService.getToken());
+  const conferenceService = baseConferenceService(accountId, async () => {
+    VoxeetSDK.initializeToken(await tokenService.getToken(), () =>
+      tokenService.getToken()
+    );
+  });
 
-  const conferenceService = baseConferenceService(accountId);
   const { startScreenSharing } = conferenceService;
   conferenceService.startScreenSharing = async () => {
     try {
@@ -24,7 +23,7 @@ export default async function forgeConferenceService(
         "https://forge-apps-development-332514.web.app/#screenSharing" +
           encodeURIComponent(
             JSON.stringify({
-              token: screenShareAccessToken,
+              token: await tokenService.getToken(),
               externalId: `share:${accountId}`,
               conferenceId: conferenceService.getRoom(),
             })
@@ -45,7 +44,7 @@ export default async function forgeConferenceService(
       "https://forge-apps-development-332514.web.app/#screenWatching" +
         encodeURIComponent(
           JSON.stringify({
-            token: screenShareAccessToken,
+            token: await tokenService.getToken(),
             externalId: `share:${accountId}`,
             conferenceId: conferenceService.getRoom(),
             sharingParticipantId: sharingParticipant.accountId,

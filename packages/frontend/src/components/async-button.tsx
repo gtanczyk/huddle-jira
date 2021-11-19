@@ -7,7 +7,7 @@ export default function AsyncButton({
   children,
   ...props
 }: ButtonProps & {
-  onClick: () => Promise<void>;
+  onClick: (event: React.MouseEvent<HTMLElement>) => Promise<void>;
   children?: React.ReactNode | React.ReactNode[] | null;
 }) {
   const [isLoading, setLoading] = useState(false);
@@ -17,10 +17,10 @@ export default function AsyncButton({
       {...props}
       isLoading={isLoading}
       isDisabled={isLoading}
-      onClick={async () => {
+      onClick={async (event) => {
         try {
           setLoading(true);
-          await onClick();
+          await onClick(event);
         } finally {
           setLoading(false);
         }

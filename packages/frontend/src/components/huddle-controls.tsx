@@ -10,12 +10,12 @@ import { useParticipants } from "../hooks/participants";
 import { useHuddleState, useHuddleStateWrite } from "../state/huddle-context";
 import InlineMessage from "@atlaskit/inline-message";
 import styled from "@emotion/styled";
+import AsyncButton from "./async-button";
 
 export default function HuddleControls() {
   return (
     <HuddleControlsContainer>
-      <MuteButton />
-      <ScreenSharingButton />
+      <MuteButton /> <ScreenSharingButton />
     </HuddleControlsContainer>
   );
 }
@@ -58,7 +58,7 @@ function ScreenSharingButton() {
 
   return (
     <>
-      <Button
+      <AsyncButton
         isDisabled={
           !!sharingParticipant &&
           (!isScreenSharing ||
@@ -78,7 +78,7 @@ function ScreenSharingButton() {
         }
       >
         Screen sharing
-      </Button>
+      </AsyncButton>
       {sharingError && (
         <InlineMessage title="Error sharing screen" type="error">
           An error occurred. Please try again later.
@@ -91,4 +91,8 @@ function ScreenSharingButton() {
 const HuddleControlsContainer = styled.div`
   display: flex;
   align-items: center;
+
+  button {
+    margin-right: 8px;
+  }
 `;

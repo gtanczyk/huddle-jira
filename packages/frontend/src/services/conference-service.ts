@@ -35,10 +35,14 @@ export type Participant = {
 
 export type SpeakingStatus = "silent" | "speaking" | "speaking-a-lot";
 
-export function baseConferenceService(externalId: string): ConferenceService {
+export function baseConferenceService(
+  externalId: string,
+  initialize = () => Promise.resolve()
+): ConferenceService {
   let sessionOpened = false;
   const openSessionIfNeeded = async () => {
     if (!sessionOpened) {
+      await initialize();
       await VoxeetSDK.session.open({ externalId });
       sessionOpened = true;
     }

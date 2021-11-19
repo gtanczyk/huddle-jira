@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import VidFullScreenOnIcon from "@atlaskit/icon/glyph/vid-full-screen-on";
 import { useHuddleState } from "../state/huddle-context";
 import { Participant } from "../services/conference-service";
@@ -7,6 +7,7 @@ import styled from "@emotion/styled";
 import Button from "@atlaskit/button";
 import { useParticipants } from "../hooks/participants";
 import { css } from "@emotion/react";
+import AsyncButton from "./async-button";
 
 export default function ScreenShareWatch() {
   const participants = useParticipants();
@@ -47,32 +48,46 @@ function ScreenShareStream({ participant }: { participant: Participant }) {
     }
   }, [ref, participantScreenShareStream, state?.conferenceService]);
 
+  const requestFullScreen = async () => {
+    try {
+      if (isRequestingFullScreen) {
+        return;
+      }
+
+      setRequestingFullScreen(true);
+      await ref.current?.querySelector("video")?.requestFullscreen();
+    } catch (e) {
+      await state?.conferenceService.showFullscreenShare();
+    } finally {
+      setRequestingFullScreen(false);
+    }
+  };
+  const [isRequestingFullScreen, setRequestingFullScreen] = useState(false);
+
   return (
     <ScreenShareWatchContainer
       ref={ref}
-      onClick={(event) => {
+      onClick={async (event) => {
         if (!event.isDefaultPrevented()) {
-          ref.current?.querySelector("video")?.requestFullscreen();
+          await requestFullScreen();
         }
       }}
     >
-      <span className="click-label">Click to open in full screen</span>
+      <span className="click-label">
+        {isRequestingFullScreen
+          ? "Requesting full screen..."
+          : "Click to open in full screen"}
+      </span>
       <ScreenShareControls>
         {state &&
           participant.accountId !== state.accountId &&
           participant.accountId !== `share:${state.accountId}` && (
-            <Button
+            <AsyncButton
               color="white"
               iconBefore={<VidFullScreenOnIcon label="Show full screen" />}
-              onClickCapture={async (event) => {
+              onClick={async (event) => {
                 event.preventDefault();
-                try {
-                  await ref.current
-                    ?.querySelector("video")
-                    ?.requestFullscreen();
-                } catch (e) {
-                  state?.conferenceService.showFullscreenShare();
-                }
+                await requestFullScreen();
               }}
             />
           )}
