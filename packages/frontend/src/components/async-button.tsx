@@ -16,7 +16,7 @@ export default function AsyncButton({
     <LoadingButton
       {...props}
       isLoading={isLoading}
-      isDisabled={isLoading}
+      isDisabled={isLoading || props.isDisabled}
       onClick={async (event) => {
         try {
           setLoading(true);

@@ -62,7 +62,8 @@ function ScreenSharingButton() {
         isDisabled={
           !!sharingParticipant &&
           (!isScreenSharing ||
-            sharingParticipant?.accountId !== state.accountId)
+            sharingParticipant?.accountId !== state.accountId ||
+            sharingParticipant?.accountId === `share:${state.accountId}`)
         }
         isSelected={isScreenSharing}
         onClick={async () => {

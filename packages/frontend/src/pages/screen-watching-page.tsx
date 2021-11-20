@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import VoxeetSDK from "@voxeet/voxeet-web-sdk";
 import SectionMessage from "@atlaskit/section-message";
 import styled from "@emotion/styled";
@@ -51,12 +51,16 @@ export default function ScreenWatchingPage() {
     initSession();
   }, []);
 
-  const [isSharing, setSharing] = useState(false);
-
   return (
     <PageContainer>
       <h1 style={{ display: "flex" }}>
-        <img src={huddleIcon} alt="Huddle in Jira" height={32} /> Huddle in Jira
+        <img
+          src={huddleIcon}
+          alt="Huddle in Jira"
+          height={32}
+          style={{ marginRight: "8px" }}
+        />{" "}
+        Full screen display for Huddle in Jira
       </h1>
       <br />
       <SectionMessage>

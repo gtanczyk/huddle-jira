@@ -169,7 +169,8 @@ export function baseConferenceService(
 async function getConferenceParticipants(currentRoomId: string) {
   const conference = await VoxeetSDK.conference.fetch(currentRoomId);
   const participants: Participant[] = [];
-  for (const participant of Array.from(conference.participants.values())) {
+  const conferenceParticipants = Array.from(conference.participants.values());
+  for (const participant of conferenceParticipants) {
     if (participant.info.externalId && participant.status === "Connected") {
       participants.push({
         accountId: participant.info.externalId,

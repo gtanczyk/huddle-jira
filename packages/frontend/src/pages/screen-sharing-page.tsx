@@ -37,7 +37,13 @@ export default function ScreenSharingPage() {
   return (
     <PageContainer>
       <h1 style={{ display: "flex" }}>
-        <img src={huddleIcon} alt="Huddle in Jira" height={32} /> Huddle in Jira
+        <img
+          src={huddleIcon}
+          alt="Huddle in Jira"
+          height={32}
+          style={{ marginRight: "8px" }}
+        />{" "}
+        Screensharing for Huddle in Jira
       </h1>
       <br />
       <SectionMessage>
