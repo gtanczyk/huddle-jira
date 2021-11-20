@@ -14,13 +14,13 @@ export default function ScreenSharingPage() {
     VoxeetSDK.initializeToken(token, () => token);
     await VoxeetSDK.session.open({ externalId });
     const conference = await VoxeetSDK.conference.fetch(conferenceId);
-    await VoxeetSDK.conference.join(conference, {});
-    await VoxeetSDK.conference.mute(VoxeetSDK.session.participant, true);
-    Array.from(VoxeetSDK.conference.participants.values()).forEach(
-      async (participant) => {
-        await VoxeetSDK.conference.mute(participant, true);
-      }
-    );
+    await VoxeetSDK.conference.join(conference, {
+      constraints: {
+        video: false,
+        audio: false,
+        screen: false,
+      },
+    });
 
     window.onbeforeunload = () => {
       VoxeetSDK.conference.leave();

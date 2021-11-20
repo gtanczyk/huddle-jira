@@ -31,9 +31,10 @@ export type ConferenceService = {
 export type Participant = {
   accountId: string;
   isScreenSharing?: boolean;
+  isMuted?: boolean;
 };
 
-export type SpeakingStatus = "silent" | "speaking" | "speaking-a-lot";
+export type SpeakingStatus = "silent" | "speaking";
 
 export function baseConferenceService(
   externalId: string,
@@ -129,7 +130,7 @@ export function baseConferenceService(
         VoxeetSDK.conference.isSpeaking(participant, (isSpeaking: boolean) => {
           setSpeaking(isSpeaking ? "speaking" : "silent");
         });
-      }, 1000);
+      }, 300);
 
       return () => clearInterval(interval);
     },
@@ -139,7 +140,11 @@ export function baseConferenceService(
     },
 
     setMuted(isMuted: boolean) {
-      VoxeetSDK.conference.mute(VoxeetSDK.session.participant, isMuted);
+      if (isMuted) {
+        VoxeetSDK.conference.stopAudio(VoxeetSDK.session.participant);
+      } else {
+        VoxeetSDK.conference.startAudio(VoxeetSDK.session.participant);
+      }
     },
     isScreenSharing(): boolean {
       return VoxeetSDK.session.participant.streams.some(
@@ -171,12 +176,16 @@ async function getConferenceParticipants(currentRoomId: string) {
   const participants: Participant[] = [];
   const conferenceParticipants = Array.from(conference.participants.values());
   for (const participant of conferenceParticipants) {
-    if (participant.info.externalId && participant.status === "Connected") {
+    if (
+      participant.info.externalId &&
+      (participant.status === "Connected" || participant.status === "Inactive")
+    ) {
       participants.push({
         accountId: participant.info.externalId,
         isScreenSharing: participant.streams.some(
           (stream) => stream.type === "ScreenShare" && stream.active
         ),
+        isMuted: !participant.audioTransmitting,
       });
     }
   }
