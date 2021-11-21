@@ -20,6 +20,8 @@ permissions:
   content:
     styles:
       - "unsafe-inline"
+    scripts:
+      - "unsafe-eval" # VoxeetSDK problem
   external:
     fetch:
       backend:

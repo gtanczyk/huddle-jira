@@ -8,9 +8,10 @@ jobs:
       - name: Install modules
         run: npm install
       # frontend
-      - name: Frontend packages
-        run: cd packages/frontend && npm install
-      - name: Lintfrontend
+      - name: Lint frontend
         run: cd packages/frontend && npm run lint
       - name: Build Frontend
         run: cd packages/frontend && npm run build
+      # backend
+      - name: Lint backend
+        run: cd packages/backend && npm run lint

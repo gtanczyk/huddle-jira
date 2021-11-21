@@ -1,23 +1,26 @@
 import { IssueDataService } from "./issue-data-service";
 
-export default function mockIssueDataService(): IssueDataService {
-  if (!localStorage["mockIssueDataService"]) {
-    localStorage["mockIssueDataService"] = JSON.stringify({});
-  }
+export default async function mockIssueDataService(): Promise<IssueDataService> {
+  const { issue } = await (await fetch("/api/getJiraContext")).json();
 
   return {
-    getProperty: async (key) =>
-      JSON.parse(localStorage["mockIssueDataService"])[key],
-    setProperty: async (key, value) => {
-      localStorage["mockIssueDataService"] = JSON.stringify({
-        ...JSON.parse(localStorage["mockIssueDataService"]),
-        [key]: value,
+    async getProperty(key) {
+      const response = await fetch(`/rest/api/3/issue/${issue.id}/properties/${key}`);
+      return response.status === 200 ? (await response.json()).value : undefined;
+    },
+    async removeProperty(key) {
+      await fetch(`/rest/api/3/issue/${issue.id}/properties/${key}`, {
+        method: "DELETE",
       });
     },
-    removeProperty: async (key) => {
-      const object = JSON.parse(localStorage["mockIssueDataService"]);
-      delete object[key];
-      localStorage["mockIssueDataService"] = JSON.stringify(object);
+    async setProperty(key, value) {
+      await fetch(`/rest/api/3/issue/${issue.id}/properties/${key}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(value),
+      });
     },
   };
 }

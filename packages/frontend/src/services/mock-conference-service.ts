@@ -1,12 +1,15 @@
 import VoxeetSDK from "@voxeet/voxeet-web-sdk";
 
 import { ConferenceService, baseConferenceService } from "./conference-service";
+import { TokenService } from "./token-service";
 
-export default function mockConferenceService(accountId: string): ConferenceService {
-  VoxeetSDK.initialize(
-    process.env.REACT_APP_DOLBY_CUSTOMER_KEY || "",
-    process.env.REACT_APP_DOLBY_CUSTOMER_SECRET || ""
-  );
+export default async function mockConferenceService(
+  accountId: string,
+  tokenService: TokenService
+): Promise<ConferenceService> {
+  const token = await tokenService.getToken();
+
+  VoxeetSDK.initializeToken(token, () => tokenService.getToken());
 
   return baseConferenceService(accountId);
 }
