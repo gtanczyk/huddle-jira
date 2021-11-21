@@ -3,7 +3,7 @@ import * as http from "http";
 import express from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 
-import { RouteRequest, Routes } from "./routes";
+import { Routes } from "./routes";
 import { generateToken } from "./token-generator";
 import jiraMocks from "./jira-mocks";
 

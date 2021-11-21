@@ -1,5 +1,6 @@
 import { Application } from "express";
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const bodyParser = require("body-parser");
 
 export default function jiraMocks(app: Application) {
@@ -24,7 +25,7 @@ export default function jiraMocks(app: Application) {
   // issue properties
 
   const issueProperties = {} as {
-    [issueId: string]: { [propertyKey: string]: any };
+    [issueId: string]: { [propertyKey: string]: unknown };
   };
 
   app.get("/rest/api/3/issue/:issueId/properties/:propertyKey", (req, res) => {

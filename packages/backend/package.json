@@ -6,11 +6,13 @@
   "private": true,
   "scripts": {
     "start": "nodemon src/dev.ts",
-    "lint": "forge lint"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "devDependencies": {
     "@forge/cli": "^2.0.5",
     "@types/express": "^4.17.13",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
     "eslint": "^7.32.0",
     "eslint-plugin-react-hooks": "^2.1.2",
     "express": "^4.17.1",
