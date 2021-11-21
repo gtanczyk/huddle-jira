@@ -1,0 +1,16 @@
+name: CI
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: npm install
+      # frontend
+      - name: Frontend packages
+        run: cd packages/frontend && npm install
+      - name: Lintfrontend
+        run: cd packages/frontend && npm run lint
+      - name: Build Frontend
+        run: cd packages/frontend && npm run build
