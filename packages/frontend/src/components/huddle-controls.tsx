@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 
+import InlineMessage from "@atlaskit/inline-message";
+import styled from "@emotion/styled";
+
 import Button from "@atlaskit/button";
 import VidAudioOnIcon from "@atlaskit/icon/glyph/vid-audio-on";
 import VidAudioMutedIcon from "@atlaskit/icon/glyph/vid-audio-muted";
@@ -7,9 +10,8 @@ import VidShareScreenIcon from "@atlaskit/icon/glyph/vid-share-screen";
 
 import { useMute, useScreenSharing } from "../hooks/conference";
 import { useParticipants } from "../hooks/participants";
-import { useHuddleState, useHuddleStateWrite } from "../state/huddle-context";
-import InlineMessage from "@atlaskit/inline-message";
-import styled from "@emotion/styled";
+import { useHuddleState } from "../state/huddle-context";
+
 import AsyncButton from "./async-button";
 
 export default function HuddleControls() {
@@ -49,12 +51,9 @@ function ScreenSharingButton() {
     return null;
   }
 
-  const sharingParticipant = participants?.find(
-    (participant) => participant.isScreenSharing
-  );
+  const sharingParticipant = participants?.find((participant) => participant.isScreenSharing);
 
-  isScreenSharing =
-    isScreenSharing && sharingParticipant?.accountId === state.accountId;
+  isScreenSharing = isScreenSharing && sharingParticipant?.accountId === state.accountId;
 
   return (
     <>
@@ -74,9 +73,7 @@ function ScreenSharingButton() {
             setSharingError(true);
           }
         }}
-        iconBefore={
-          <VidShareScreenIcon label="Click to start sharing your screen" />
-        }
+        iconBefore={<VidShareScreenIcon label="Click to start sharing your screen" />}
       >
         Screen sharing
       </AsyncButton>

@@ -1,4 +1,7 @@
+import React from "react";
+
 import { useHuddleStateSelector } from "../state/huddle-context";
+
 import HuddleConnected from "./huddle-connected";
 import HuddleConnect from "./huddle-connect";
 

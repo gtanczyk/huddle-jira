@@ -1,7 +1,10 @@
+import React from "react";
+
 import styled from "@emotion/styled";
 import VidHangUpIcon from "@atlaskit/icon/glyph/vid-hang-up";
 
 import { useHuddleDisconnect } from "../state/huddle-actions";
+
 import ParticipantList from "./participants-list";
 import AsyncButton from "./async-button";
 import HuddleControls from "./huddle-controls";
@@ -14,11 +17,7 @@ export default function HuddleConnected() {
     <Container>
       <Column>
         <HuddleConnectedContainer>
-          <AsyncButton
-            onClick={disconnect}
-            iconBefore={<VidHangUpIcon label="Disconnect" />}
-            appearance="danger"
-          >
+          <AsyncButton onClick={disconnect} iconBefore={<VidHangUpIcon label="Disconnect" />} appearance="danger">
             Leave huddle
           </AsyncButton>
           <ParticipantList />

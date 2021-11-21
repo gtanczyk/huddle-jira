@@ -1,20 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
+
 import VidFullScreenOnIcon from "@atlaskit/icon/glyph/vid-full-screen-on";
+import Button from "@atlaskit/button";
+import styled from "@emotion/styled";
+import { css } from "@emotion/react";
+
 import { useHuddleState } from "../state/huddle-context";
 import { Participant } from "../services/conference-service";
 import { useParticipantScreenShareStream } from "../hooks/conference";
-import styled from "@emotion/styled";
-import Button from "@atlaskit/button";
 import { useParticipants } from "../hooks/participants";
-import { css } from "@emotion/react";
 import AsyncButton from "./async-button";
 
 export default function ScreenShareWatch() {
   const participants = useParticipants();
 
-  const sharingParticipant = participants?.find(
-    (participant) => participant.isScreenSharing
-  );
+  const sharingParticipant = participants?.find((participant) => participant.isScreenSharing);
 
   if (!sharingParticipant) {
     return null;
@@ -25,8 +25,7 @@ export default function ScreenShareWatch() {
 
 function ScreenShareStream({ participant }: { participant: Participant }) {
   const ref = useRef<HTMLDivElement>(null);
-  const participantScreenShareStream =
-    useParticipantScreenShareStream(participant);
+  const participantScreenShareStream = useParticipantScreenShareStream(participant);
   const state = useHuddleState();
 
   useEffect(() => {
@@ -35,8 +34,7 @@ function ScreenShareStream({ participant }: { participant: Participant }) {
     }
 
     if (ref.current && !ref.current?.querySelector("video")) {
-      const stream =
-        state.conferenceService.getParticipantScreenShare(participant);
+      const stream = state.conferenceService.getParticipantScreenShare(participant);
       if (!stream) {
         return;
       }
@@ -46,6 +44,7 @@ function ScreenShareStream({ participant }: { participant: Participant }) {
       video.srcObject = stream;
       ref.current.appendChild(video);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref, participantScreenShareStream, state?.conferenceService]);
 
   const requestFullScreen = async () => {
@@ -74,23 +73,19 @@ function ScreenShareStream({ participant }: { participant: Participant }) {
       }}
     >
       <span className="click-label">
-        {isRequestingFullScreen
-          ? "Requesting full screen..."
-          : "Click to open in full screen"}
+        {isRequestingFullScreen ? "Requesting full screen..." : "Click to open in full screen"}
       </span>
       <ScreenShareControls>
-        {state &&
-          participant.accountId !== state.accountId &&
-          participant.accountId !== `share:${state.accountId}` && (
-            <AsyncButton
-              color="white"
-              iconBefore={<VidFullScreenOnIcon label="Show full screen" />}
-              onClick={async (event) => {
-                event.preventDefault();
-                await requestFullScreen();
-              }}
-            />
-          )}
+        {state && participant.accountId !== state.accountId && participant.accountId !== `share:${state.accountId}` && (
+          <AsyncButton
+            color="white"
+            iconBefore={<VidFullScreenOnIcon label="Show full screen" />}
+            onClick={async (event) => {
+              event.preventDefault();
+              await requestFullScreen();
+            }}
+          />
+        )}
         {HTMLVideoElement.prototype.requestPictureInPicture && (
           <>
             {" "}
@@ -156,16 +151,10 @@ const ScreenShareControls = styled.div`
 `;
 
 const PIPIcon = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M6 18H9L9.70711 18.2929L10 19L9.70711 19.7071L9 20H6C5.46957 20 4.96086 19.7893 4.58579 19.4142C4.21071 19.0391 4 18.5304 4 18V15L4.5 14.5L5 14C5 14 5.32614 14.3261 5.51367 14.5137L6 15V18ZM18 20H9L9.70711 19.7071L10 19L9.70711 18.2929L9 18H18V15L18.2929 14.2929L19 14L19.7071 14.2929L20 15V18C20 18.5304 19.7893 19.0391 19.4142 19.4142C19.0391 19.7893 18.5304 20 18 20ZM6 4H9L9.70711 4.29289L10 5L9.70711 5.70711L9 6H6V9C6 9.26522 6 15 6 15L5.5 14.5L5 14L4 15C4 15 4 9.26522 4 9V6C4 5.46957 4.21071 4.96086 4.58579 4.58579C4.96086 4.21071 5.46957 4 6 4ZM18 6H9L9.70711 5.70711L10 5L9.70711 4.29289L9 4H18C18.5304 4 19.0391 4.21071 19.4142 4.58579C19.7893 4.96086 20 5.46957 20 6V15L19.7071 14.2929L19 14L18.2929 14.2929L18 15V6Z"
       fill="currentColor"
     />

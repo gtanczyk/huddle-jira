@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
+
 import VoxeetSDK from "@voxeet/voxeet-web-sdk";
+
 import Button from "@atlaskit/button";
 import SectionMessage from "@atlaskit/section-message";
 import VidShareScreenIcon from "@atlaskit/icon/glyph/vid-share-screen";
 import styled from "@emotion/styled";
+
 import huddleIcon from "../assets/huddle-icon.svg";
 
 export default function ScreenSharingPage() {
@@ -37,31 +40,21 @@ export default function ScreenSharingPage() {
   return (
     <PageContainer>
       <h1 style={{ display: "flex" }}>
-        <img
-          src={huddleIcon}
-          alt="Huddle in Jira"
-          height={32}
-          style={{ marginRight: "8px" }}
-        />{" "}
-        Screensharing for Huddle in Jira
+        <img src={huddleIcon} alt="Huddle in Jira" height={32} style={{ marginRight: "8px" }} /> Screensharing for
+        Huddle in Jira
       </h1>
       <br />
       <SectionMessage>
         This page is used to share your screen with your colleagues.
         <br />
-        Please note that you are invited to this page due to Atlassian Forge
-        limitations (
-        <a
-          href="https://ecosystem.atlassian.net/browse/FRGE-555"
-          target="_blank"
-        >
+        Please note that you are invited to this page due to Atlassian Forge limitations (
+        <a href="https://ecosystem.atlassian.net/browse/FRGE-555" target="_blank" rel="noreferrer">
           details here
         </a>
         ).
         <br />
         <br />
-        <b>Huddle in Jira</b> will stop using this intermediate page hopefully
-        very soon.
+        <b>Huddle in Jira</b> will stop using this intermediate page hopefully very soon.
       </SectionMessage>
       <br />
       <Button

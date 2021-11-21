@@ -1,10 +1,6 @@
 import React, { useEffect } from "react";
 import ProgressBar from "@atlaskit/progress-bar";
-import {
-  HuddleContextProvider,
-  useHuddleState,
-  useHuddleStateWrite,
-} from "../state/huddle-context";
+import { HuddleContextProvider, useHuddleState, useHuddleStateWrite } from "../state/huddle-context";
 import Huddle from "../components/huddle";
 import mockIssueDataService from "../services/mock-issue-data-service";
 import { mockTokenService } from "../services/token-service";
@@ -15,9 +11,7 @@ import { mockUserService } from "../services/mock-user-service";
 export default function MockedPanelPage() {
   return (
     <HuddleContextProvider>
-      <div
-        style={{ width: "870px", margin: "0 auto", border: "1px solid #eee" }}
-      >
+      <div style={{ width: "870px", margin: "0 auto", border: "1px solid #eee" }}>
         <MockedPanelPageContent />
       </div>
     </HuddleContextProvider>
@@ -34,11 +28,7 @@ function MockedPanelPageContent() {
 
     const issueDataService = mockIssueDataService();
     const conferenceService = mockConferenceService(accountId);
-    const huddleService = getHuddleService(
-      accountId,
-      issueDataService,
-      conferenceService
-    );
+    const huddleService = getHuddleService(accountId, issueDataService, conferenceService);
 
     await huddleService.init();
 
@@ -56,6 +46,7 @@ function MockedPanelPageContent() {
 
   useEffect(() => {
     initState();
+    // eslint-disable-next-line
   }, []);
 
   if (!state) {

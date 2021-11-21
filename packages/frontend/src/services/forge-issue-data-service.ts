@@ -1,4 +1,5 @@
 import { invoke, requestJira } from "@forge/bridge";
+
 import { IssueDataService } from "./issue-data-service";
 
 export default async function forgeIssueDataService(): Promise<IssueDataService> {
@@ -6,12 +7,8 @@ export default async function forgeIssueDataService(): Promise<IssueDataService>
 
   return {
     async getProperty(key) {
-      const response = await requestJira(
-        `/rest/api/3/issue/${issue.id}/properties/${key}`
-      );
-      return response.status === 200
-        ? (await response.json()).value
-        : undefined;
+      const response = await requestJira(`/rest/api/3/issue/${issue.id}/properties/${key}`);
+      return response.status === 200 ? (await response.json()).value : undefined;
     },
     async removeProperty(key) {
       await requestJira(`/rest/api/3/issue/${issue.id}/properties/${key}`, {

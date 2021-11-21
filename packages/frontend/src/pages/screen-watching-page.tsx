@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from "react";
+
 import VoxeetSDK from "@voxeet/voxeet-web-sdk";
 import SectionMessage from "@atlaskit/section-message";
 import styled from "@emotion/styled";
+
 import { videoControlStyles } from "../components/screen-share-watch";
 import huddleIcon from "../assets/huddle-icon.svg";
 
@@ -9,10 +11,9 @@ export default function ScreenWatchingPage() {
   const ref = useRef<HTMLDivElement>(null);
 
   const initSession = async () => {
-    const { token, externalId, conferenceId, sharingParticipantId } =
-      JSON.parse(
-        decodeURIComponent(document.location.hash.split("#screenWatching")[1])
-      );
+    const { token, externalId, conferenceId, sharingParticipantId } = JSON.parse(
+      decodeURIComponent(document.location.hash.split("#screenWatching")[1])
+    );
     VoxeetSDK.initializeToken(token, () => token);
     await VoxeetSDK.session.open({ externalId });
     const conference = await VoxeetSDK.conference.fetch(conferenceId);
@@ -26,13 +27,9 @@ export default function ScreenWatchingPage() {
 
     const participants = Array.from(VoxeetSDK.conference.participants.values());
 
-    const sharingParticipant = participants.find(
-      (participant) => participant.info.externalId === sharingParticipantId
-    );
+    const sharingParticipant = participants.find((participant) => participant.info.externalId === sharingParticipantId);
     if (sharingParticipant && ref.current) {
-      const stream = sharingParticipant.streams.find(
-        (stream) => stream.type === "ScreenShare" && stream.active
-      );
+      const stream = sharingParticipant.streams.find((stream) => stream.type === "ScreenShare" && stream.active);
       if (stream) {
         const video: HTMLVideoElement = document.createElement("video");
         video.autoplay = true;
@@ -54,31 +51,21 @@ export default function ScreenWatchingPage() {
   return (
     <PageContainer>
       <h1 style={{ display: "flex" }}>
-        <img
-          src={huddleIcon}
-          alt="Huddle in Jira"
-          height={32}
-          style={{ marginRight: "8px" }}
-        />{" "}
-        Full screen display for Huddle in Jira
+        <img src={huddleIcon} alt="Huddle in Jira" height={32} style={{ marginRight: "8px" }} /> Full screen display for
+        Huddle in Jira
       </h1>
       <br />
       <SectionMessage>
         This page is used to display screen shares of your colleages.
         <br />
-        Please note that you are invited to this page due to Atlassian Forge
-        limitations (
-        <a
-          href="https://ecosystem.atlassian.net/browse/FRGE-534"
-          target="_blank"
-        >
+        Please note that you are invited to this page due to Atlassian Forge limitations (
+        <a href="https://ecosystem.atlassian.net/browse/FRGE-534" target="_blank" rel="noreferrer">
           details here
         </a>
         ).
         <br />
         <br />
-        <b>Huddle in Jira</b> will stop using this intermediate page hopefully
-        very soon.
+        <b>Huddle in Jira</b> will stop using this intermediate page hopefully very soon.
       </SectionMessage>
       <br />
       <VideoContainer

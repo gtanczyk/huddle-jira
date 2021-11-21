@@ -1,17 +1,16 @@
 import { router } from "@forge/bridge";
 
+import VoxeetSDK from "@voxeet/voxeet-web-sdk";
+
 import { baseConferenceService, ConferenceService } from "./conference-service";
 import { TokenService } from "./token-service";
-import VoxeetSDK from "@voxeet/voxeet-web-sdk";
 
 export default async function forgeConferenceService(
   accountId: string,
   tokenService: TokenService
 ): Promise<ConferenceService> {
   const conferenceService = baseConferenceService(accountId, async () => {
-    VoxeetSDK.initializeToken(await tokenService.getToken(), () =>
-      tokenService.getToken()
-    );
+    VoxeetSDK.initializeToken(await tokenService.getToken(), () => tokenService.getToken());
   });
 
   const { startScreenSharing } = conferenceService;

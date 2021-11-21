@@ -1,4 +1,5 @@
 import React from "react";
+
 import Avatar from "@atlaskit/avatar";
 import styled from "@emotion/styled";
 import Tooltip from "@atlaskit/tooltip";
@@ -8,7 +9,6 @@ import VidSpeakingCircleIcon from "@atlaskit/icon/glyph/vid-speaking-circle";
 
 import { useParticipants, useSpeakingStatus } from "../hooks/participants";
 import { useUserDetails } from "../hooks/users";
-import { SpeakingStatus } from "../services/conference-service";
 
 export default function ParticipantList() {
   const participants = useParticipants();
@@ -24,11 +24,7 @@ export default function ParticipantList() {
             isMuted={participant.isMuted === true}
             isScreenSharing={
               participant.isScreenSharing === true ||
-              participants.some(
-                (p) =>
-                  p.isScreenSharing === true &&
-                  p.accountId === `share:${participant.accountId}`
-              )
+              participants.some((p) => p.isScreenSharing === true && p.accountId === `share:${participant.accountId}`)
             }
           />
         ))}
@@ -51,26 +47,16 @@ function Participant({
   return (
     <ParticipantContainer>
       <Tooltip content={userDetails?.displayName || "Unknown user"}>
-        <Avatar
-          name={userDetails?.displayName}
-          src={userDetails?.avatarUrls["32x32"]}
-        />
+        <Avatar name={userDetails?.displayName} src={userDetails?.avatarUrls["32x32"]} />
       </Tooltip>
       {speaking === "speaking" && (
         <SmallIcon style={{ left: 0 }}>
-          <VidSpeakingCircleIcon
-            size="small"
-            label="This participant is speaking"
-          />
+          <VidSpeakingCircleIcon size="small" label="This participant is speaking" />
         </SmallIcon>
       )}
       {isScreenSharing && (
         <SmallIcon style={{ background: "#0052cc", right: 0 }}>
-          <ScreenIcon
-            primaryColor="white"
-            label="Participant is sharing their screen"
-            size="small"
-          />
+          <ScreenIcon primaryColor="white" label="Participant is sharing their screen" size="small" />
         </SmallIcon>
       )}
       {isMuted && (

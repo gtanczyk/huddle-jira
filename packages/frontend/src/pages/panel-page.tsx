@@ -1,13 +1,9 @@
-import Huddle from "../components/huddle";
-import {
-  HuddleContextProvider,
-  useHuddleState,
-  useHuddleStateWrite,
-} from "../state/huddle-context";
 import React, { useEffect } from "react";
 
 import ProgressBar from "@atlaskit/progress-bar";
 
+import Huddle from "../components/huddle";
+import { HuddleContextProvider, useHuddleState, useHuddleStateWrite } from "../state/huddle-context";
 import forgeIssueDataService from "../services/forge-issue-data-service";
 import forgeTokenService from "../services/forge-token-service";
 import forgeConferenceService from "../services/forge-conference-service";
@@ -32,15 +28,8 @@ function PanelPageContent() {
     const tokenService = forgeTokenService();
 
     const issueDataService = await forgeIssueDataService();
-    const conferenceService = await forgeConferenceService(
-      accountId,
-      tokenService
-    );
-    const huddleService = getHuddleService(
-      accountId,
-      issueDataService,
-      conferenceService
-    );
+    const conferenceService = await forgeConferenceService(accountId, tokenService);
+    const huddleService = getHuddleService(accountId, issueDataService, conferenceService);
 
     await huddleService.init();
 
@@ -58,6 +47,7 @@ function PanelPageContent() {
 
   useEffect(() => {
     initState();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!state) {

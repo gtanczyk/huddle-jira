@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { useHuddleState } from "../state/huddle-context";
 import { Participant } from "../services/conference-service";
 
@@ -19,10 +20,7 @@ export function useMute(): [boolean, (isMuted: boolean) => void] {
   ];
 }
 
-export function useScreenSharing(): [
-  boolean,
-  (isScreenSharing: boolean) => void
-] {
+export function useScreenSharing(): [boolean, (isScreenSharing: boolean) => void] {
   const state = useHuddleState();
   const [isScreenSharing, setScreenSharing] = useState<boolean>(() => {
     return state?.conferenceService.isScreenSharing() || false;
