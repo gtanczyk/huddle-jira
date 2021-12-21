@@ -1,4 +1,5 @@
 import * as http from "http";
+import axios from "axios";
 //@ts-ignore
 import express from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
@@ -20,7 +21,9 @@ const routes: Routes = {
     };
   },
   async getToken() {
-    return await generateToken();
+    return await generateToken(
+      async (url, data, config) => (await axios.post(url, data, config)).data
+    );
   },
 };
 

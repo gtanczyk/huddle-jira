@@ -1,8 +1,7 @@
-import axios from "axios";
-
 import { DOLBY_CONSUMER_KEY, DOLBY_CONSUMER_SECRET } from "./config";
+import { PostRequestFn } from "./routes";
 
-export async function generateToken() {
+export async function generateToken(postRequest: PostRequestFn) {
   console.log("Start generating token");
   const credentials = Buffer.from(
     DOLBY_CONSUMER_KEY + ":" + DOLBY_CONSUMER_SECRET
@@ -18,8 +17,7 @@ export async function generateToken() {
 
   try {
     console.log("Make a request to voxeet.com");
-    const response = await axios.post(url, data, config);
-    const { access_token } = response.data;
+    const { access_token } = await postRequest(url, data, config);
     console.log("Token generated");
     return access_token;
   } catch (e) {
