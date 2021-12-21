@@ -4,8 +4,9 @@ import { Routes } from "./routes";
 
 const routes: Routes = {
   getToken: generateToken,
-  getJiraContext: async ({ context }) => context.extension,
-  getAccountId: ({ context }) => context.accountId,
+  getJiraContext: ({ context }) =>
+    Promise.resolve(context.extension as Record<string, unknown>),
+  getAccountId: ({ context }) => Promise.resolve(context.accountId as string),
 };
 
 const resolver = new Resolver();
