@@ -1,4 +1,4 @@
-import { IssueDataService } from "./issue-data-service";
+import { ContentPropertyService } from "./content-property-service";
 import { ConferenceService, Participant } from "./conference-service";
 
 export type HuddleService = {
@@ -10,20 +10,15 @@ export type HuddleService = {
 
 export function getHuddleService(
   accountId: string,
-  issueDataService: IssueDataService,
+  contentPropertyService: ContentPropertyService,
   conferenceService: ConferenceService
 ): HuddleService {
   async function getHuddleParticipants(): Promise<Record<string, boolean>> {
-    return (await issueDataService.getProperty("huddleParticipants")) || {};
+    return (await contentPropertyService.getProperty("huddleParticipants")) || {};
   }
 
-  async function setHuddleParticipants(
-    huddleParticipants: Record<string, boolean>
-  ) {
-    await issueDataService.setProperty(
-      "huddleParticipants",
-      huddleParticipants
-    );
+  async function setHuddleParticipants(huddleParticipants: Record<string, boolean>) {
+    await contentPropertyService.setProperty("huddleParticipants", huddleParticipants);
   }
 
   async function updateHuddleParticipants(isPresent: boolean) {
@@ -40,9 +35,7 @@ export function getHuddleService(
 
   return {
     init: async () => {
-      let huddleRoomId = await issueDataService.getProperty<string>(
-        "huddleRoomId"
-      );
+      let huddleRoomId = await contentPropertyService.getProperty<string>("huddleRoomId");
       if (huddleRoomId) {
         conferenceService.setRoom(huddleRoomId);
       }
