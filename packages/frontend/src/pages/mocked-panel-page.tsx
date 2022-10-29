@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import ProgressBar from "@atlaskit/progress-bar";
 import { HuddleContextProvider, useHuddleState, useHuddleStateWrite } from "../state/huddle-context";
 import Huddle from "../components/huddle";
-import mockIssueDataService from "../services/mock-issue-data-service";
+import mockContentPropertyService from "../services/mock-content-property-service";
 import mockTokenService from "../services/mock-token-service";
 import mockConferenceService from "../services/mock-conference-service";
 import { getHuddleService } from "../services/huddle-service";
@@ -27,17 +27,18 @@ function MockedPanelPageContent() {
     const accountId = await userService.getAccountId();
     const tokenService = mockTokenService();
 
-    const issueDataService = await mockIssueDataService();
+    const contentPropertyService = await mockContentPropertyService();
     const conferenceService = await mockConferenceService(accountId, tokenService);
-    const huddleService = getHuddleService(accountId, issueDataService, conferenceService);
+    const huddleService = getHuddleService(accountId, contentPropertyService, conferenceService);
 
     await huddleService.init();
 
     setState({
       accountId,
       isConnected: false,
+      autoConnect: false,
 
-      issueDataService,
+      contentPropertyService,
       tokenService,
       conferenceService,
       huddleService,

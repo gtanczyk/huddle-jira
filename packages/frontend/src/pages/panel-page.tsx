@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 
 import ProgressBar from "@atlaskit/progress-bar";
+import { invoke } from "@forge/bridge";
 
 import Huddle from "../components/huddle";
 import { HuddleContextProvider, useHuddleState, useHuddleStateWrite } from "../state/huddle-context";
-import forgeIssueDataService from "../services/forge-issue-data-service";
+import forgeContentPropertyService from "../services/forge-content-property-service";
 import forgeTokenService from "../services/forge-token-service";
 import forgeConferenceService from "../services/forge-conference-service";
 import { getHuddleService } from "../services/huddle-service";
@@ -27,17 +28,20 @@ function PanelPageContent() {
     const accountId = await userService.getAccountId();
     const tokenService = forgeTokenService();
 
-    const issueDataService = await forgeIssueDataService();
+    const contentPropertyService = await forgeContentPropertyService();
     const conferenceService = await forgeConferenceService(accountId, tokenService);
-    const huddleService = getHuddleService(accountId, issueDataService, conferenceService);
+    const huddleService = getHuddleService(accountId, contentPropertyService, conferenceService);
 
     await huddleService.init();
 
+    const { issue, content, isEditing } = await invoke("getProductContext");
+
     setState({
+      autoConnect: !issue && content && isEditing,
       isConnected: false,
       accountId,
 
-      issueDataService,
+      contentPropertyService,
       tokenService,
       conferenceService: conferenceService,
       huddleService,
@@ -54,5 +58,5 @@ function PanelPageContent() {
     return <ProgressBar isIndeterminate />;
   }
 
-  return <Huddle />;
+  return <Huddle autoConnect={state.autoConnect} />;
 }

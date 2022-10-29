@@ -15,7 +15,7 @@ const routes: Routes = {
           })
         ).json()
     ),
-  getJiraContext: ({ context }) =>
+  getProductContext: ({ context }) =>
     Promise.resolve(context.extension as Record<string, unknown>),
   getAccountId: ({ context }) => Promise.resolve(context.accountId as string),
 };

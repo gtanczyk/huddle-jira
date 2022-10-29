@@ -6,6 +6,12 @@ modules:
         function: resolver
       title: Huddle in Jira
       icon: https://storage.googleapis.com/forge-apps-dev-icons/huddle-icon.svg?1
+  macro:
+    - key: huddle-macro
+      resource: main
+      resolver:
+        function: resolver
+      title: Huddle
   function:
     - key: resolver
       handler: index.handler
@@ -17,6 +23,8 @@ permissions:
     - read:jira-work
     - write:jira-work
     - read:jira-user
+    - write:confluence-props
+    - read:confluence-props
   content:
     styles:
       - "unsafe-inline"

@@ -2,7 +2,7 @@ import { createContainer } from "react-tracked";
 import React, { useState } from "react";
 
 import { TokenService } from "../services/token-service";
-import { IssueDataService } from "../services/issue-data-service";
+import { ContentPropertyService } from "../services/content-property-service";
 import { ConferenceService } from "../services/conference-service";
 import { HuddleService } from "../services/huddle-service";
 import { UserService } from "../services/user-service";
@@ -10,8 +10,9 @@ import { UserService } from "../services/user-service";
 type HuddleState = {
   accountId: string;
   isConnected: boolean;
+  autoConnect: boolean;
 
-  issueDataService: IssueDataService;
+  contentPropertyService: ContentPropertyService;
   tokenService: TokenService;
   conferenceService: ConferenceService;
   userService: UserService;

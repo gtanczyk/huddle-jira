@@ -7,6 +7,7 @@ import { createProxyMiddleware } from "http-proxy-middleware";
 import { Routes } from "./routes";
 import { generateToken } from "./token-generator";
 import jiraMocks from "./jira-mocks";
+import confluenceMocks from "./confluence-mocks";
 
 const app = express();
 
@@ -15,10 +16,14 @@ const routes: Routes = {
     //@ts-ignore
     return request.headers["user-agent"];
   },
-  async getJiraContext() {
-    return {
-      issue: { id: 10000 },
-    };
+  async getProductContext() {
+    return process.env["CONFLUENCE"]
+      ? {
+          content: { id: 10000 },
+        }
+      : {
+          issue: { id: 10000 },
+        };
   },
   async getToken() {
     return await generateToken(
@@ -39,7 +44,13 @@ for (const [key, fn] of Object.entries(routes)) {
   });
 }
 
-jiraMocks(app);
+if (process.env["CONFLUENCE"]) {
+  console.log("MOCKING CONFLUENCE");
+  confluenceMocks(app);
+} else {
+  console.log("MOCKING JIRA");
+  jiraMocks(app);
+}
 
 const proxy = createProxyMiddleware({
   target: "http://localhost:3000",

@@ -10,23 +10,27 @@ import AsyncButton from "./async-button";
 import HuddleControls from "./huddle-controls";
 import ScreenShareWatch from "./screen-share-watch";
 
-export default function HuddleConnected() {
+export default function HuddleConnected({ autoConnect = false }) {
   const disconnect = useHuddleDisconnect();
 
   return (
     <Container>
       <Column>
         <HuddleConnectedContainer>
-          <AsyncButton onClick={disconnect} iconBefore={<VidHangUpIcon label="Disconnect" />} appearance="danger">
-            Leave huddle
-          </AsyncButton>
+          {!autoConnect && (
+            <AsyncButton onClick={disconnect} iconBefore={<VidHangUpIcon label="Disconnect" />} appearance="danger">
+              Leave huddle
+            </AsyncButton>
+          )}
           <ParticipantList />
         </HuddleConnectedContainer>
-        <HuddleControls />
+        {!autoConnect && <HuddleControls />}
       </Column>
-      <Column>
-        <ScreenShareWatch />
-      </Column>
+      {!autoConnect && (
+        <Column>
+          <ScreenShareWatch />
+        </Column>
+      )}
     </Container>
   );
 }

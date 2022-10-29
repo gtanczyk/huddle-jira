@@ -13,6 +13,6 @@ export type PostRequestFn = <T>(
 
 export type Routes = {
   getToken(): Promise<string>;
-  getJiraContext(request: RouteRequest): Promise<Record<string, unknown>>;
+  getProductContext(request: RouteRequest): Promise<Record<string, unknown>>;
   getAccountId(request: RouteRequest): Promise<string>;
 };

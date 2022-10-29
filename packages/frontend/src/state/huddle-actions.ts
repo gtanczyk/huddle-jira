@@ -11,30 +11,20 @@ export function useHuddleConnect() {
       throw new Error("State not initialised!");
     }
 
-    let huddleRoomAlias = await state.issueDataService.getProperty<string>(
-      "huddleRoomAlias"
-    );
+    let huddleRoomAlias = await state.contentPropertyService.getProperty<string>("huddleRoomAlias");
     if (!huddleRoomAlias) {
-      await state.issueDataService.setProperty(
-        "huddleRoomAlias",
-        (huddleRoomAlias = uuidv4())
-      );
+      await state.contentPropertyService.setProperty("huddleRoomAlias", (huddleRoomAlias = uuidv4()));
     }
     if (!huddleRoomAlias) {
       // Should never happen, but typescript doesn't know that
       throw new Error("Failed to get huddle room alias!");
     }
 
-    let huddleRoomId = await state.issueDataService.getProperty<string>(
-      "huddleRoomId"
-    );
+    let huddleRoomId = await state.contentPropertyService.getProperty<string>("huddleRoomId");
 
-    if (
-      !huddleRoomId ||
-      !(await state.conferenceService.roomExists(huddleRoomId))
-    ) {
+    if (!huddleRoomId || !(await state.conferenceService.roomExists(huddleRoomId))) {
       huddleRoomId = await state.conferenceService.createRoom(huddleRoomAlias);
-      await state.issueDataService.setProperty("huddleRoomId", huddleRoomId);
+      await state.contentPropertyService.setProperty("huddleRoomId", huddleRoomId);
       state.conferenceService.setRoom(huddleRoomId);
     }
 
