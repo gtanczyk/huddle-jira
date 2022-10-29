@@ -36,6 +36,7 @@ function MockedPanelPageContent() {
     setState({
       accountId,
       isConnected: false,
+      autoConnect: false,
 
       contentPropertyService,
       tokenService,

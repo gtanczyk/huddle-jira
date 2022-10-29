@@ -1,14 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import styled from "@emotion/styled";
+import ProgressBar from "@atlaskit/progress-bar";
 
 import { useHuddleConnect } from "../state/huddle-actions";
 
 import AsyncButton from "./async-button";
 import ParticipantList from "./participants-list";
 
-export default function HuddleConnect() {
+export default function HuddleConnect({ autoConnect = false }) {
   const connect = useHuddleConnect();
+
+  useEffect(() => {
+    if (autoConnect) {
+      connect();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (autoConnect) {
+    return <ProgressBar isIndeterminate={true} />;
+  }
 
   return (
     <HuddleConnectContainer>

@@ -10,6 +10,7 @@ import { UserService } from "../services/user-service";
 type HuddleState = {
   accountId: string;
   isConnected: boolean;
+  autoConnect: boolean;
 
   contentPropertyService: ContentPropertyService;
   tokenService: TokenService;

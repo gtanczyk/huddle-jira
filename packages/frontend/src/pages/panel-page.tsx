@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 
 import ProgressBar from "@atlaskit/progress-bar";
+import { invoke } from "@forge/bridge";
 
 import Huddle from "../components/huddle";
 import { HuddleContextProvider, useHuddleState, useHuddleStateWrite } from "../state/huddle-context";
@@ -33,7 +34,10 @@ function PanelPageContent() {
 
     await huddleService.init();
 
+    const { issue, content, isEditing } = await invoke("getProductContext");
+
     setState({
+      autoConnect: !issue && content && isEditing,
       isConnected: false,
       accountId,
 
@@ -54,5 +58,5 @@ function PanelPageContent() {
     return <ProgressBar isIndeterminate />;
   }
 
-  return <Huddle />;
+  return <Huddle autoConnect={state.autoConnect} />;
 }
